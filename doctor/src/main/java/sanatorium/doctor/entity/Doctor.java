@@ -24,6 +24,10 @@ public class Doctor {
     private String firstName;
     private String lastName;
     private String medicalSpecialty;
+    private Double salary;
+    private String address;
+    private String numberAddress;
+    private String phoneNumber;
 
 
 }

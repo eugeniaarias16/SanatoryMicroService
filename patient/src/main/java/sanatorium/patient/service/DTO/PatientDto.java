@@ -20,26 +20,26 @@ import java.time.LocalDate;
 @Schema(description = "DTO representing a patient")
 public class PatientDto {
 
-    public Long id;
+    private Long id;
     @NotBlank
     @Size(min = 2, max = 70)
-    public String firstName;
+    private String firstName;
     @NotBlank
     @Size(min = 2, max = 70)
-    public String lastName;
+    private String lastName;
     @NotBlank
     @Size(min = 2, max = 20)
     @Schema(description = "Client's national ID number", example = "40123456")
-    public String  dni;
+    private String  dni;
     @NotBlank
     @Size(min = 10, max = 15)
     @Schema(description = "Patient's phone number in international format ",example = "+5491112345678")
-    public String phoneNumber;
+    private String phoneNumber;
 
     @Past(message = "The date of birth must be earlier than today.")
     @NotNull
     @Schema(description = "Client's date of birth", example = "1990-05-20")
-    public LocalDate birthDate;
+    private LocalDate birthDate;
 
     public PatientDto(Patient patient){
         if(patient !=null){

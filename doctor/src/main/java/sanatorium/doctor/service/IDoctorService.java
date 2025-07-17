@@ -9,5 +9,5 @@ public interface IDoctorService {
     DoctorDto updateDoctorById(Long id,DoctorDto doctorDto);
     DoctorDto createDoctor(DoctorDto doctorDto);
     void deleteDoctor(Long id);
-
+    DoctorDto getDoctorByFullNameAndSpecialty(String firstName, String lastName, String specialty);
 }

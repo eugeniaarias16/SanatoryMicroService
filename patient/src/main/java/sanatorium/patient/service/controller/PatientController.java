@@ -23,7 +23,7 @@ public class PatientController {
         PatientDto patientDto=patientService.getPatientById(id);
         return ResponseEntity.ok(patientDto);
     }
-    @GetMapping("/{dni}")
+    @GetMapping("/dni/{dni}")
     public ResponseEntity<PatientDto>getPatientByDni(@PathVariable String dni){
         PatientDto patientDto=patientService.getPatientByDni(dni);
         return ResponseEntity.ok(patientDto);

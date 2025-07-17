@@ -8,11 +8,11 @@
 		<version>3.5.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>patient</artifactId>
+	<groupId>sanatorium</groupId>
+	<artifactId>medicalAppointment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>tunos_pacientes</name>
-	<description>Microservice with SpringBoot</description>
+	<name>medicalAppointment</name>
+	<description>Medical Appointment Service</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -60,11 +60,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+
 
 	</dependencies>
 

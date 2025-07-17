@@ -32,12 +32,22 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
+    public DoctorDto getDoctorByFullNameAndSpecialty(String firstName, String lastName, String specialty) {
+
+        Doctor doctor=doctorRepository.findByFirstNameAndLastNameAndMedicalSpecialty(firstName,lastName,specialty)
+                .orElseThrow(()->new ResourceNotFoundException("Doctor with that information was not found."));
+
+        return new DoctorDto(doctor);
+    }
+
+
+    @Override
     public DoctorDto updateDoctorById(Long id, DoctorDto doctorDto) {
         Doctor existingDoctor=doctorRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Doctor Not found with the id "+id));
-        existingDoctor.setFirstName(doctorDto.firstName);
-        existingDoctor.setLastName(doctorDto.lastName);
-        existingDoctor.setMedicalSpecialty(doctorDto.medicalSpecialty);
+        existingDoctor.setFirstName(doctorDto.getFirstName());
+        existingDoctor.setLastName(doctorDto.getLastName());
+        existingDoctor.setMedicalSpecialty(doctorDto.getMedicalSpecialty());
         Doctor doctor=doctorRepository.save(existingDoctor);
         return new DoctorDto(doctor);
     }
@@ -53,4 +63,6 @@ public class DoctorService implements IDoctorService {
     public void deleteDoctor(Long id) {
         doctorRepository.deleteById(id);
     }
+
+
 }
