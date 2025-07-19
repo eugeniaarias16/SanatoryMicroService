@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import sanatorium.medicalAppointment.entity.MedicalAppointment;
 
 
 import java.time.LocalDateTime;
@@ -23,7 +22,7 @@ public class MedicalAppointmentRequestDto {
     private String appointmentDate;
     private String appointmentTime;
 
-    public LocalDateTime getAppointmentDateTime(){
+    public LocalDateTime toLocalDateTime(){
         String dateTimeString=appointmentDate+" "+appointmentTime;
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return LocalDateTime.parse(dateTimeString,formatter);

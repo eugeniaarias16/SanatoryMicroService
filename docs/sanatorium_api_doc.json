@@ -1,0 +1,978 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Medical System API - Complete Documentation",
+    "version": "1.0.0",
+    "description": "Unified API documentation for the complete Medical System including Patient Management, Doctor Management, and Medical Appointments microservices. This system provides comprehensive healthcare management capabilities across three specialized services.",
+    "contact": {
+      "name": "Medical System API Support",
+      "email": "support@medical-system.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9001",
+      "description": "Patient Management Service"
+    },
+    {
+      "url": "http://localhost:9002", 
+      "description": "Doctor Management Service"
+    },
+    {
+      "url": "http://localhost:9003",
+      "description": "Medical Appointment Service"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Patient Management",
+      "description": "Operations related to patient management - Port 9001"
+    },
+    {
+      "name": "Doctor Management", 
+      "description": "Operations related to doctor management - Port 9002"
+    },
+    {
+      "name": "Medical Appointments",
+      "description": "Operations related to medical appointments - Port 9003"
+    }
+  ],
+  "paths": {
+    "/api/patient/create": {
+      "post": {
+        "tags": ["Patient Management"],
+        "summary": "Create new patient",
+        "description": "Creates a new patient in the system",
+        "operationId": "createPatient",
+        "servers": [{"url": "http://localhost:9001"}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/patient/{id}": {
+      "get": {
+        "tags": ["Patient Management"],
+        "summary": "Patient by Id",
+        "description": "Get patient by id",
+        "operationId": "getPatientById",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "Unique identifier of the patient"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      }
+    },
+    "/api/patient/dni/{dni}": {
+      "get": {
+        "tags": ["Patient Management"],
+        "summary": "Patient by Dni",
+        "description": "Get patient by dni",
+        "operationId": "getPatientByDni",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "National ID number of the patient"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      }
+    },
+    "/api/patient/updateById/{id}": {
+      "put": {
+        "tags": ["Patient Management"],
+        "summary": "Update patient by Id",
+        "description": "Update patient by id",
+        "operationId": "updatePatientById",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      }
+    },
+    "/api/patient/updateByDni/{dni}": {
+      "put": {
+        "tags": ["Patient Management"],
+        "summary": "Update patient by Dni",
+        "description": "Update patient by dni",
+        "operationId": "updatePatientByDni",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      }
+    },
+    "/api/patient/update/id/{id}": {
+      "patch": {
+        "tags": ["Patient Management"],
+        "summary": "Update partially patient's information by Id",
+        "description": "Update partially patient's information by id",
+        "operationId": "partialUpdatePatientById",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Object with fields to update. Only include the fields you want to modify."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient partially updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      }
+    },
+    "/api/patient/update/dni/{dni}": {
+      "patch": {
+        "tags": ["Patient Management"],
+        "summary": "Update partially patient's information by Dni",
+        "description": "Update partially patient's information by dni",
+        "operationId": "partialUpdatePatientByDni",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Object with fields to update. Only include the fields you want to modify."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Patient partially updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      }
+    },
+    "/api/patient/delete/{id}": {
+      "delete": {
+        "tags": ["Patient Management"],
+        "summary": "Delete patient by id",
+        "description": "Deletes a patient from the system by ID",
+        "operationId": "deletePatient",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Patient deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found"
+          }
+        }
+      }
+    },
+    "/api/doctor/create": {
+      "post": {
+        "tags": ["Doctor Management"],
+        "summary": "Create new Doctor",
+        "description": "Creates a new doctor in the system",
+        "operationId": "createDoctor",
+        "servers": [{"url": "http://localhost:9002"}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoctorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Doctor created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/doctor": {
+      "get": {
+        "tags": ["Doctor Management"],
+        "summary": "Search doctors",
+        "description": "Search doctors by lastName, firstName, or medical specialty",
+        "operationId": "searchDoctors",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "lastName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Doctor's last name"
+          },
+          {
+            "name": "firstName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Doctor's first name"
+          },
+          {
+            "name": "medicalSpecialty",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Doctor's medical specialty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctors found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/doctor/id/{id}": {
+      "get": {
+        "tags": ["Doctor Management"],
+        "summary": "Get doctor by ID",
+        "description": "Retrieves a doctor by their unique ID",
+        "operationId": "getDoctorById",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "Unique identifier of the doctor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctor found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Doctor not found"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Doctor Management"],
+        "summary": "Update doctor's full information",
+        "description": "Update doctor's information with id",
+        "operationId": "updateDoctor",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoctorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Doctor updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Doctor not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Doctor Management"],
+        "summary": "Delete Doctor by id",
+        "description": "Deletes a doctor from the system by ID",
+        "operationId": "deleteDoctor",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctor deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Doctor not found"
+          }
+        }
+      }
+    },
+    "/api/doctor/partialUpdate/id/{id}": {
+      "patch": {
+        "tags": ["Doctor Management"],
+        "summary": "Update doctor's partial information",
+        "description": "Update doctor's information with id",
+        "operationId": "partialUpdateDoctorById",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Object with fields to update. Only include the fields you want to modify."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Doctor partially updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Doctor not found"
+          }
+        }
+      }
+    },
+    "/api/doctor/partialUpdate/lastName/{lastName}": {
+      "patch": {
+        "tags": ["Doctor Management"],
+        "summary": "Update doctor's partial information",
+        "description": "Update doctor's information with Last Name",
+        "operationId": "partialUpdateDoctorByLastName",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "lastName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Object with fields to update. Only include the fields you want to modify."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Doctor partially updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Doctor not found"
+          }
+        }
+      }
+    },
+    "/api/doctor/specialty/{medicalSpecialty}": {
+      "get": {
+        "tags": ["Doctor Management"],
+        "summary": "Get all doctors with a specific medical specialty",
+        "description": "Retrieves all doctors that have the specified medical specialty",
+        "operationId": "getDoctorBySpecialty",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "medicalSpecialty",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The medical specialty to filter doctors by",
+            "example": "cardiology"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Doctors found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DoctorDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No doctors found with this specialty"
+          }
+        }
+      }
+    },
+    "/api/appointment/create": {
+      "post": {
+        "tags": ["Medical Appointments"],
+        "summary": "Create new medical appointment",
+        "description": "Creates a new medical appointment in the system. The service automatically combines appointmentDate and appointmentTime into a LocalDateTime.",
+        "operationId": "createMedicalAppointment",
+        "servers": [{"url": "http://localhost:9003"}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedicalAppointmentRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Medical appointment created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MedicalAppointmentResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/appointment/patient/dni/{dni}": {
+      "get": {
+        "tags": ["Medical Appointments"],
+        "summary": "Get appointments by patient DNI",
+        "description": "Retrieves all medical appointments for a specific patient by their DNI",
+        "operationId": "getMedicalAppointmentsByPatientDni",
+        "servers": [{"url": "http://localhost:9003"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Patient's national ID number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointments found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MedicalAppointmentResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No appointments found for this patient"
+          }
+        }
+      }
+    },
+    "/api/appointment/delete/{id}": {
+      "delete": {
+        "tags": ["Medical Appointments"],
+        "summary": "Delete medical appointment",
+        "description": "Deletes a medical appointment from the system by ID",
+        "operationId": "deleteMedicalAppointment",
+        "servers": [{"url": "http://localhost:9003"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "Unique identifier of the appointment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Appointment deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Appointment not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PatientDto": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "dni",
+          "phoneNumber",
+          "birthDate"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Unique identifier of the patient"
+          },
+          "firstName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 70,
+            "description": "Patient's first name"
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 70,
+            "description": "Patient's last name"
+          },
+          "dni": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 20,
+            "description": "Client's national ID number",
+            "example": "40123456"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 15,
+            "description": "Patient's phone number in international format",
+            "example": "+5491112345678"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Client's date of birth",
+            "example": "1990-05-20"
+          }
+        },
+        "description": "DTO representing a patient"
+      },
+      "DoctorDto": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "medicalSpecialty"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "Unique identifier of the doctor"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Doctor's First Name",
+            "example": "Juan"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Doctor's Last Name",
+            "example": "Perez"
+          },
+          "medicalSpecialty": {
+            "type": "string",
+            "description": "Doctor's medical speciality",
+            "example": "cardiology"
+          },
+          "salary": {
+            "type": "number",
+            "format": "double",
+            "minimum": 1,
+            "description": "Doctor's mensual salary",
+            "example": 50000000
+          },
+          "address": {
+            "type": "string",
+            "description": "Doctor's address street",
+            "example": "Av Figueroa"
+          },
+          "numberAddress": {
+            "type": "string",
+            "description": "Doctor's address number",
+            "example": "1234"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 15,
+            "description": "Doctor's phone number in international format",
+            "example": "+5491112345678"
+          }
+        },
+        "description": "Representation of a Doctor in the system"
+      },
+      "MedicalAppointmentRequestDto": {
+        "type": "object",
+        "properties": {
+          "patientDni": {
+            "type": "string",
+            "description": "Patient's national ID number"
+          },
+          "doctorFirstName": {
+            "type": "string",
+            "description": "Doctor's first name"
+          },
+          "doctorLastName": {
+            "type": "string",
+            "description": "Doctor's last name"
+          },
+          "doctorSpecialty": {
+            "type": "string",
+            "description": "Doctor's medical specialty"
+          },
+          "appointmentDate": {
+            "type": "string",
+            "description": "Appointment date in dd/MM/yyyy format",
+            "example": "15/08/2025"
+          },
+          "appointmentTime": {
+            "type": "string",
+            "description": "Appointment time in HH:mm format",
+            "example": "14:30"
+          }
+        },
+        "description": "Request DTO for creating a medical appointment. The service automatically combines appointmentDate and appointmentTime into a LocalDateTime."
+      },
+      "MedicalAppointmentResponseDto": {
+        "type": "object",
+        "properties": {
+          "fullNamePatient": {
+            "type": "string",
+            "description": "Patient's full name"
+          },
+          "appointmentDate": {
+            "type": "string",
+            "description": "Appointment date"
+          },
+          "fullNameDoctor": {
+            "type": "string",
+            "description": "Doctor's full name"
+          },
+          "formattedMessage": {
+            "type": "string",
+            "description": "Formatted appointment confirmation message"
+          }
+        },
+        "description": "Response DTO for medical appointment information"
+      }
+    }
+  }
+}

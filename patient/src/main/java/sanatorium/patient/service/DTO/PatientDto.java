@@ -1,5 +1,6 @@
 package sanatorium.patient.service.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import sanatorium.patient.service.entity.Patient;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 @Schema(description = "DTO representing a patient")
 public class PatientDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotBlank
     @Size(min = 2, max = 70)

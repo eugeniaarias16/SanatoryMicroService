@@ -1,6 +1,7 @@
 package sanatorium.doctor.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,18 +18,24 @@ import sanatorium.doctor.entity.Doctor;
 @AllArgsConstructor
 @Schema(description = "Representation of a Doctor in the system")
 public class DoctorDto {
-    
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotBlank
+    @Schema(description = "Doctor's First Name",example = "Juan")
     private String firstName;
     @NotBlank
+    @Schema(description = "Doctor's Last Name", example = "Perez")
     private String lastName;
     @NotBlank
-    @Schema(description = "doctor's medical speciality", example = "cardiology")
+    @Schema(description = "Doctor's medical speciality", example = "cardiology")
     private String medicalSpecialty;
     @Min(value = 1,message = "Salary cannot be lower than 1.")
+    @Schema(description = "Doctor's mensual salary", example = "50000000")
     private Double salary;
+    @Schema(description = "Doctor's address street",example = "Av Figueroa")
     private String address;
+    @Schema(description = "Doctor's address number", example = "1234")
     private String numberAddress;
     @Size(min = 10, max = 15)
     @Schema(description = "Doctor's phone number in international format ",example = "+5491112345678")
