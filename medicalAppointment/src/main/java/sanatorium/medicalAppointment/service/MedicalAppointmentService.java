@@ -7,7 +7,11 @@ import sanatorium.medicalAppointment.dto.MedicalAppointmentResponseDto;
 import sanatorium.medicalAppointment.entity.Doctor;
 import sanatorium.medicalAppointment.entity.MedicalAppointment;
 import sanatorium.medicalAppointment.entity.Patient;
+import sanatorium.medicalAppointment.exceptions.ResourceNotFoundException;
 import sanatorium.medicalAppointment.repository.IMedicalAppointmentRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -40,7 +44,7 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
 
         //create the shift appointment with the data obtained from the apis and the date
         MedicalAppointment medicalAppointment=new MedicalAppointment();
-        medicalAppointment.setAppointmentDateTime(requestDto.getAppointmentDateTime());
+        medicalAppointment.setAppointmentDateTime(requestDto.toLocalDateTime());
         medicalAppointment.setDoctor(doctor);
         medicalAppointment.setPatient(patient);
 
@@ -55,4 +59,17 @@ public class MedicalAppointmentService implements IMedicalAppointmentService {
     public void deleteAppointmentById(Long id) {
         medicalAppointmentRepository.deleteById(id);
     }
+
+    @Override
+    public List<MedicalAppointmentResponseDto> getAppointmentsByPatientDni(String dni) {
+        List<MedicalAppointment> medicalAppointmentList=medicalAppointmentRepository.findMedicalAppointmentsByPatientDni(dni);
+        if(medicalAppointmentList.isEmpty()){
+            throw new ResourceNotFoundException("No appointments found.");
+        }
+        return medicalAppointmentList.stream()
+                .map(MedicalAppointmentResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+
 }
