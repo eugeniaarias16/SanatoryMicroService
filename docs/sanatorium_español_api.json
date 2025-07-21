@@ -1,0 +1,1244 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Sistema Médico Integral - API Completa",
+    "version": "2.0.0",
+    "description": "API unificada para el Sistema Médico Integral que incluye gestión de Pacientes, Doctores y Citas Médicas. Este sistema proporciona capacidades completas de gestión sanitaria a través de tres servicios especializados.",
+    "contact": {
+      "name": "Soporte API Sistema Médico",
+      "email": "support@medical-system.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9001",
+      "description": "🏥 Servicio de Gestión de Pacientes"
+    },
+    {
+      "url": "http://localhost:9002", 
+      "description": "👨‍⚕️ Servicio de Gestión de Doctores"
+    },
+    {
+      "url": "http://localhost:9003",
+      "description": "📅 Servicio de Citas Médicas"
+    }
+  ],
+  "tags": [
+    {
+      "name": "👤 Pacientes - CRUD",
+      "description": "Operaciones completas de gestión de pacientes (Puerto 9001)"
+    },
+    {
+      "name": "👤 Pacientes - Consultas",
+      "description": "Operaciones de consulta y búsqueda de pacientes (Puerto 9001)"
+    },
+    {
+      "name": "👨‍⚕️ Doctores - CRUD", 
+      "description": "Operaciones completas de gestión de doctores (Puerto 9002)"
+    },
+    {
+      "name": "👨‍⚕️ Doctores - Consultas",
+      "description": "Operaciones de consulta y búsqueda de doctores (Puerto 9002)"
+    },
+    {
+      "name": "📅 Citas Médicas",
+      "description": "Gestión completa de citas médicas (Puerto 9003)"
+    }
+  ],
+  "paths": {
+    "/api/patient/create": {
+      "post": {
+        "tags": ["👤 Pacientes - CRUD"],
+        "summary": "➕ Crear nuevo paciente",
+        "description": "Crea un nuevo paciente en el sistema con toda su información personal y médica.",
+        "operationId": "createPatient",
+        "servers": [{"url": "http://localhost:9001"}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatientDto"
+              },
+              "example": {
+                "firstName": "Ana",
+                "lastName": "García",
+                "dni": "12345678",
+                "phoneNumber": "+5491123456789",
+                "birthDate": "1985-03-15"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Paciente creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Datos de entrada inválidos"
+          },
+          "409": {
+            "description": "⚠️ Ya existe un paciente con este DNI"
+          },
+          "500": {
+            "description": "🔥 Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/api/patient/{id}": {
+      "get": {
+        "tags": ["👤 Pacientes - Consultas"],
+        "summary": "🔍 Obtener paciente por ID",
+        "description": "Busca y retorna un paciente específico usando su ID único del sistema.",
+        "operationId": "getPatientById",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 123
+            },
+            "description": "🆔 Identificador único del paciente en el sistema"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Paciente encontrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado con ese ID"
+          }
+        }
+      }
+    },
+    "/api/patient/dni/{dni}": {
+      "get": {
+        "tags": ["👤 Pacientes - Consultas"],
+        "summary": "🔍 Obtener paciente por DNI",
+        "description": "Busca y retorna un paciente específico usando su Documento Nacional de Identidad.",
+        "operationId": "getPatientByDni",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "12345678"
+            },
+            "description": "🆔 Número de DNI del paciente"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Paciente encontrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado con ese DNI"
+          }
+        }
+      }
+    },
+    "/api/patient/full-update/id/{id}": {
+      "put": {
+        "tags": ["👤 Pacientes - CRUD"],
+        "summary": "🔄 Actualización COMPLETA por ID",
+        "description": "⚠️ ACTUALIZACIÓN COMPLETA: Reemplaza TODA la información del paciente. Todos los campos son obligatorios.",
+        "operationId": "fullUpdatePatientById",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "🆔 ID del paciente a actualizar completamente"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "⚠️ Debe incluir TODOS los campos del paciente. Los campos faltantes se perderán.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatientDto"
+              },
+              "example": {
+                "firstName": "Ana María",
+                "lastName": "García López",
+                "dni": "12345678",
+                "phoneNumber": "+5491123456789",
+                "birthDate": "1985-03-15"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Paciente actualizado completamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Datos inválidos o campos faltantes"
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado"
+          }
+        }
+      }
+    },
+    "/api/patient/full-update/dni/{dni}": {
+      "put": {
+        "tags": ["👤 Pacientes - CRUD"],
+        "summary": "🔄 Actualización COMPLETA por DNI",
+        "description": "⚠️ ACTUALIZACIÓN COMPLETA: Reemplaza TODA la información del paciente. Todos los campos son obligatorios.",
+        "operationId": "fullUpdatePatientByDni",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "🆔 DNI del paciente a actualizar completamente"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "⚠️ Debe incluir TODOS los campos del paciente. Los campos faltantes se perderán.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Paciente actualizado completamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Datos inválidos o campos faltantes"
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado"
+          }
+        }
+      }
+    },
+    "/api/patient/partial-update/id/{id}": {
+      "patch": {
+        "tags": ["👤 Pacientes - CRUD"],
+        "summary": "✏️ Actualización PARCIAL por ID",
+        "description": "✏️ ACTUALIZACIÓN PARCIAL: Modifica solo los campos enviados. Los campos no enviados permanecen sin cambios.",
+        "operationId": "partialUpdatePatientById",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "🆔 ID del paciente a actualizar parcialmente"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "💡 Incluye solo los campos que deseas modificar. Ejemplo: solo teléfono o solo nombre.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "description": "Nuevo nombre (opcional)"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "description": "Nuevo apellido (opcional)"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "Nuevo teléfono (opcional)"
+                  },
+                  "birthDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Nueva fecha de nacimiento (opcional)"
+                  }
+                }
+              },
+              "examples": {
+                "solo_telefono": {
+                  "summary": "Cambiar solo teléfono",
+                  "value": {
+                    "phoneNumber": "+5491187654321"
+                  }
+                },
+                "nombre_y_apellido": {
+                  "summary": "Cambiar nombre y apellido",
+                  "value": {
+                    "firstName": "María José",
+                    "lastName": "González"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Paciente actualizado parcialmente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Formato de datos inválido"
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado"
+          }
+        }
+      }
+    },
+    "/api/patient/partial-update/dni/{dni}": {
+      "patch": {
+        "tags": ["👤 Pacientes - CRUD"],
+        "summary": "✏️ Actualización PARCIAL por DNI",
+        "description": "✏️ ACTUALIZACIÓN PARCIAL: Modifica solo los campos enviados. Los campos no enviados permanecen sin cambios.",
+        "operationId": "partialUpdatePatientByDni",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "🆔 DNI del paciente a actualizar parcialmente"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "💡 Incluye solo los campos que deseas modificar.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "description": "Nuevo nombre (opcional)"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "description": "Nuevo apellido (opcional)"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "Nuevo teléfono (opcional)"
+                  },
+                  "birthDate": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Nueva fecha de nacimiento (opcional)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Paciente actualizado parcialmente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Formato de datos inválido"
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado"
+          }
+        }
+      }
+    },
+    "/api/patient/delete/{id}": {
+      "delete": {
+        "tags": ["👤 Pacientes - CRUD"],
+        "summary": "🗑️ Eliminar paciente",
+        "description": "⚠️ OPERACIÓN IRREVERSIBLE: Elimina permanentemente un paciente del sistema por su ID.",
+        "operationId": "deletePatient",
+        "servers": [{"url": "http://localhost:9001"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "🆔 ID del paciente a eliminar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Paciente eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Paciente eliminado exitosamente"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado"
+          },
+          "409": {
+            "description": "⚠️ No se puede eliminar: el paciente tiene citas médicas asociadas"
+          }
+        }
+      }
+    },
+    "/api/doctor/create": {
+      "post": {
+        "tags": ["👨‍⚕️ Doctores - CRUD"],
+        "summary": "➕ Crear nuevo doctor",
+        "description": "Registra un nuevo doctor en el sistema con toda su información profesional y personal.",
+        "operationId": "createDoctor",
+        "servers": [{"url": "http://localhost:9002"}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoctorDto"
+              },
+              "example": {
+                "firstName": "Carlos",
+                "lastName": "Mendoza",
+                "medicalSpecialty": "cardiología",
+                "salary": 75000000,
+                "address": "Av. Libertador",
+                "numberAddress": "5678",
+                "phoneNumber": "+5491198765432"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Doctor creado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Datos de entrada inválidos"
+          },
+          "409": {
+            "description": "⚠️ Ya existe un doctor con estos datos"
+          },
+          "500": {
+            "description": "🔥 Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/api/doctor/search": {
+      "get": {
+        "tags": ["👨‍⚕️ Doctores - Consultas"],
+        "summary": "🔍 Buscar doctores con filtros",
+        "description": "Busca doctores usando filtros opcionales: apellido, nombre o especialidad médica. Si no se envían filtros, devuelve todos los doctores.",
+        "operationId": "searchDoctors",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "lastName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "García"
+            },
+            "description": "🔍 Filtrar por apellido del doctor"
+          },
+          {
+            "name": "firstName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "Juan"
+            },
+            "description": "🔍 Filtrar por nombre del doctor"
+          },
+          {
+            "name": "medicalSpecialty",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "cardiología"
+            },
+            "description": "🔍 Filtrar por especialidad médica"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Búsqueda completada (puede devolver lista vacía)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DoctorDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Parámetros de búsqueda inválidos"
+          }
+        }
+      }
+    },
+    "/api/doctor/id/{id}": {
+      "get": {
+        "tags": ["👨‍⚕️ Doctores - Consultas"],
+        "summary": "🔍 Obtener doctor por ID",
+        "description": "Busca y retorna un doctor específico usando su ID único del sistema.",
+        "operationId": "getDoctorById",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 456
+            },
+            "description": "🆔 Identificador único del doctor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Doctor encontrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "❌ Doctor no encontrado con ese ID"
+          }
+        }
+      },
+      "put": {
+        "tags": ["👨‍⚕️ Doctores - CRUD"],
+        "summary": "🔄 Actualización COMPLETA por ID",
+        "description": "⚠️ ACTUALIZACIÓN COMPLETA: Reemplaza TODA la información del doctor. Todos los campos obligatorios son requeridos.",
+        "operationId": "fullUpdateDoctor",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "🆔 ID del doctor a actualizar completamente"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "⚠️ Debe incluir todos los campos obligatorios del doctor.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DoctorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Doctor actualizado completamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Datos inválidos o campos obligatorios faltantes"
+          },
+          "404": {
+            "description": "❌ Doctor no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["👨‍⚕️ Doctores - CRUD"],
+        "summary": "🗑️ Eliminar doctor",
+        "description": "⚠️ OPERACIÓN IRREVERSIBLE: Elimina permanentemente un doctor del sistema por su ID.",
+        "operationId": "deleteDoctor",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "🆔 ID del doctor a eliminar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Doctor eliminado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Doctor eliminado exitosamente"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "❌ Doctor no encontrado"
+          },
+          "409": {
+            "description": "⚠️ No se puede eliminar: el doctor tiene citas médicas asignadas"
+          }
+        }
+      }
+    },
+    "/api/doctor/partial-update/id/{id}": {
+      "patch": {
+        "tags": ["👨‍⚕️ Doctores - CRUD"],
+        "summary": "✏️ Actualización PARCIAL por ID",
+        "description": "✏️ ACTUALIZACIÓN PARCIAL: Modifica solo los campos enviados. Los campos no enviados permanecen sin cambios.",
+        "operationId": "partialUpdateDoctorById",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "description": "🆔 ID del doctor a actualizar parcialmente"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "💡 Incluye solo los campos que deseas modificar. Ejemplo: solo salario o solo teléfono.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "description": "Nuevo nombre (opcional)"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "description": "Nuevo apellido (opcional)"
+                  },
+                  "medicalSpecialty": {
+                    "type": "string",
+                    "description": "Nueva especialidad (opcional)"
+                  },
+                  "salary": {
+                    "type": "number",
+                    "description": "Nuevo salario (opcional)"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Nueva dirección (opcional)"
+                  },
+                  "numberAddress": {
+                    "type": "string",
+                    "description": "Nuevo número de dirección (opcional)"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "Nuevo teléfono (opcional)"
+                  }
+                }
+              },
+              "examples": {
+                "solo_salario": {
+                  "summary": "Cambiar solo salario",
+                  "value": {
+                    "salary": 85000000
+                  }
+                },
+                "contacto": {
+                  "summary": "Actualizar información de contacto",
+                  "value": {
+                    "phoneNumber": "+5491187654321",
+                    "address": "Nueva Av. Principal",
+                    "numberAddress": "9999"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Doctor actualizado parcialmente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Formato de datos inválido"
+          },
+          "404": {
+            "description": "❌ Doctor no encontrado"
+          }
+        }
+      }
+    },
+    "/api/doctor/partial-update/lastName/{lastName}": {
+      "patch": {
+        "tags": ["👨‍⚕️ Doctores - CRUD"],
+        "summary": "✏️ Actualización PARCIAL por Apellido",
+        "description": "✏️ ACTUALIZACIÓN PARCIAL: Modifica solo los campos enviados del doctor identificado por apellido.",
+        "operationId": "partialUpdateDoctorByLastName",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "lastName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "🆔 Apellido del doctor a actualizar parcialmente"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "💡 Incluye solo los campos que deseas modificar.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Doctor actualizado parcialmente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DoctorDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Formato de datos inválido"
+          },
+          "404": {
+            "description": "❌ Doctor no encontrado con ese apellido"
+          }
+        }
+      }
+    },
+    "/api/doctor/specialty/{medicalSpecialty}": {
+      "get": {
+        "tags": ["👨‍⚕️ Doctores - Consultas"],
+        "summary": "🏥 Obtener doctores por especialidad",
+        "description": "Retorna todos los doctores que tienen una especialidad médica específica.",
+        "operationId": "getDoctorsBySpecialty",
+        "servers": [{"url": "http://localhost:9002"}],
+        "parameters": [
+          {
+            "name": "medicalSpecialty",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "cardiología"
+            },
+            "description": "🏥 Especialidad médica a buscar (ej: cardiología, neurología, pediatría)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Lista de doctores con esa especialidad (puede estar vacía)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DoctorDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Especialidad inválida"
+          }
+        }
+      }
+    },
+    "/api/appointment/create": {
+      "post": {
+        "tags": ["📅 Citas Médicas"],
+        "summary": "➕ Crear nueva cita médica",
+        "description": "Programa una nueva cita médica en el sistema. El servicio combina automáticamente la fecha y hora en un LocalDateTime.",
+        "operationId": "createMedicalAppointment",
+        "servers": [{"url": "http://localhost:9003"}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MedicalAppointmentRequestDto"
+              },
+              "example": {
+                "patientDni": "12345678",
+                "doctorFirstName": "Carlos",
+                "doctorLastName": "Mendoza",
+                "doctorSpecialty": "cardiología",
+                "appointmentDate": "25/08/2025",
+                "appointmentTime": "15:30"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "✅ Cita médica creada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MedicalAppointmentResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "❌ Datos inválidos (fecha/hora incorrecta, paciente o doctor no encontrado)"
+          },
+          "409": {
+            "description": "⚠️ Conflicto: El doctor ya tiene una cita en esa fecha/hora"
+          },
+          "500": {
+            "description": "🔥 Error interno del servidor"
+          }
+        }
+      }
+    },
+    "/api/appointment/patient/dni/{dni}": {
+      "get": {
+        "tags": ["📅 Citas Médicas"],
+        "summary": "🔍 Obtener citas por DNI del paciente",
+        "description": "Retorna todas las citas médicas (pasadas y futuras) de un paciente específico usando su DNI.",
+        "operationId": "getMedicalAppointmentsByPatientDni",
+        "servers": [{"url": "http://localhost:9003"}],
+        "parameters": [
+          {
+            "name": "dni",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "12345678"
+            },
+            "description": "🆔 DNI del paciente para buscar sus citas"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Lista de citas del paciente (puede estar vacía si no tiene citas)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MedicalAppointmentResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "❌ Paciente no encontrado con ese DNI"
+          }
+        }
+      }
+    },
+    "/api/appointment/delete/{id}": {
+      "delete": {
+        "tags": ["📅 Citas Médicas"],
+        "summary": "🗑️ Cancelar cita médica",
+        "description": "⚠️ OPERACIÓN IRREVERSIBLE: Cancela y elimina una cita médica del sistema por su ID.",
+        "operationId": "deleteMedicalAppointment",
+        "servers": [{"url": "http://localhost:9003"}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "example": 789
+            },
+            "description": "🆔 ID único de la cita médica a cancelar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "✅ Cita médica cancelada exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Cita médica cancelada exitosamente"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "❌ Cita médica no encontrada"
+          },
+          "409": {
+            "description": "⚠️ No se puede cancelar: la cita ya fue realizada"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PatientDto": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "dni",
+          "phoneNumber",
+          "birthDate"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "🆔 ID único del paciente (generado automáticamente)",
+            "example": 123
+          },
+          "firstName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 70,
+            "description": "👤 Nombre del paciente",
+            "example": "Ana María"
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 70,
+            "description": "👤 Apellido del paciente",
+            "example": "García López"
+          },
+          "dni": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 20,
+            "description": "🆔 Documento Nacional de Identidad (único en el sistema)",
+            "example": "12345678",
+            "pattern": "^[0-9]+$"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 15,
+            "description": "📞 Teléfono en formato internacional (+código país)",
+            "example": "+5491123456789",
+            "pattern": "^\\+[1-9]\\d{1,14}$"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "description": "🎂 Fecha de nacimiento (formato: YYYY-MM-DD)",
+            "example": "1985-03-15"
+          }
+        },
+        "description": "📋 DTO que representa un paciente en el sistema médico"
+      },
+      "DoctorDto": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "medicalSpecialty"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true,
+            "description": "🆔 ID único del doctor (generado automáticamente)",
+            "example": 456
+          },
+          "firstName": {
+            "type": "string",
+            "description": "👨‍⚕️ Nombre del doctor",
+            "example": "Carlos Alberto"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "👨‍⚕️ Apellido del doctor",
+            "example": "Mendoza"
+          },
+          "medicalSpecialty": {
+            "type": "string",
+            "description": "🏥 Especialidad médica del doctor",
+            "example": "cardiología",
+            "enum": [
+              "cardiología",
+              "neurología",
+              "pediatría",
+              "ginecología",
+              "traumatología",
+              "dermatología",
+              "oftalmología",
+              "psiquiatría",
+              "medicina general"
+            ]
+          },
+          "salary": {
+            "type": "number",
+            "format": "double",
+            "minimum": 1,
+            "description": "💰 Salario mensual del doctor (en pesos argentinos)",
+            "example": 75000000
+          },
+          "address": {
+            "type": "string",
+            "description": "🏠 Dirección - nombre de la calle/avenida",
+            "example": "Av. Libertador"
+          },
+          "numberAddress": {
+            "type": "string",
+            "description": "🏠 Dirección - número de la casa/edificio",
+            "example": "5678"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 15,
+            "description": "📞 Teléfono en formato internacional (+código país)",
+            "example": "+5491198765432",
+            "pattern": "^\\+[1-9]\\d{1,14}$"
+          }
+        },
+        "description": "👨‍⚕️ DTO que representa un doctor en el sistema médico"
+      },
+      "MedicalAppointmentRequestDto": {
+        "type": "object",
+        "required": [
+          "patientDni",
+          "doctorFirstName",
+          "doctorLastName",
+          "doctorSpecialty",
+          "appointmentDate",
+          "appointmentTime"
+        ],
+        "properties": {
+          "patientDni": {
+            "type": "string",
+            "description": "🆔 DNI del paciente (debe existir en el sistema)",
+            "example": "12345678",
+            "pattern": "^[0-9]+$"
+          },
+          "doctorFirstName": {
+            "type": "string",
+            "description": "👨‍⚕️ Nombre del doctor",
+            "example": "Carlos"
+          },
+          "doctorLastName": {
+            "type": "string",
+            "description": "👨‍⚕️ Apellido del doctor",
+            "example": "Mendoza"
+          },
+          "doctorSpecialty": {
+            "type": "string",
+            "description": "🏥 Especialidad médica del doctor",
+            "example": "cardiología"
+          },
+          "appointmentDate": {
+            "type": "string",
+            "description": "📅 Fecha de la cita (formato: DD/MM/YYYY)",
+            "example": "25/08/2025",
+            "pattern": "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$"
+          },
+          "appointmentTime": {
+            "type": "string",
+            "description": "🕐 Hora de la cita (formato: HH:MM en 24h)",
+            "example": "15:30",
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+          }
+        },
+        "description": "📝 DTO para crear una nueva cita médica. El sistema combina fecha y hora automáticamente."
+      },
+      "MedicalAppointmentResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "🆔 ID único de la cita médica",
+            "example": 789
+          },
+          "fullNamePatient": {
+            "type": "string",
+            "description": "👤 Nombre completo del paciente",
+            "example": "Ana María García López"
+          },
+          "appointmentDate": {
+            "type": "string",
+            "description": "📅 Fecha y hora formateada de la cita",
+            "example": "25/08/2025 15:30"
+          },
+          "fullNameDoctor": {
+            "type": "string",
+            "description": "👨‍⚕️ Nombre completo del doctor",
+            "example": "Dr. Carlos Alberto Mendoza"
+          },
+          "formattedMessage": {
+            "type": "string",
+            "description": "💬 Mensaje formateado con resumen de la cita",
+            "example": "Cita programada: Ana María García López tiene cita con Dr. Carlos Alberto Mendoza (Cardiología) el 25/08/2025 a las 15:30"
+          }
+        },
+        "description": "📋 DTO de respuesta con información completa de la cita médica"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "🔐 Autenticación JWT Bearer Token (si está habilitada en el sistema)"
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true,
+    "samples-enabled": true
+  },
+  "externalDocs": {
+    "description": "📚 Documentación adicional del Sistema Médico",
+    "url": "https://docs.medical-system.com"
+  }
+}

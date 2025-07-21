@@ -2,6 +2,7 @@ package sanatorium.patient.service.service;
 
 import sanatorium.patient.service.DTO.PatientDto;
 import sanatorium.patient.service.entity.Patient;
+import sanatorium.patient.service.exeptions.DuplicateFieldError;
 import sanatorium.patient.service.exeptions.ResourceNotFoundException;
 import sanatorium.patient.service.repository.IPatientRepository;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,12 @@ public class PatientService implements IPatientService{
 
     @Override
     public PatientDto createPatient(PatientDto patientDto) {
+
+        //Validate if this dni does not already exist
+        if(patientRepository.findByDni(patientDto.getDni()).isPresent()){
+            throw new DuplicateFieldError("Patient with that DNI already exists.");
+        }
+
         Patient patient=patientDto.toEntityNoId();
         Patient savedPatient=patientRepository.save(patient);
         return new PatientDto(savedPatient);
@@ -78,7 +85,14 @@ public class PatientService implements IPatientService{
                 case "lastName"->existingPatient.setLastName((String)value );
                 case "dni"->existingPatient.setDni((String)value);
                 case "phoneNumber"->existingPatient.setPhoneNumber((String) value);
-                case "birthDate"->existingPatient.setBirthDate((LocalDate) value);
+                case "birthDate"->{
+                    if(value instanceof String){
+                        existingPatient.setBirthDate(LocalDate.parse((String)value));
+                    } else if (value instanceof LocalDate) {
+                        existingPatient.setBirthDate((LocalDate) value);
+                    }
+                }
+                default -> System.out.println("Field not recognized: "+key);
             }
         });
         Patient savedPatient=patientRepository.save(existingPatient);
@@ -94,7 +108,14 @@ public class PatientService implements IPatientService{
                 case "lastName"->existingPatient.setLastName((String)value );
                 case "dni"->existingPatient.setDni((String)value);
                 case "phoneNumber"->existingPatient.setPhoneNumber((String) value);
-                case "birthDate"->existingPatient.setBirthDate((LocalDate) value);
+                case "birthDate"->{
+                    if(value instanceof String){
+                        existingPatient.setBirthDate(LocalDate.parse((String)value));
+                    } else if (value instanceof LocalDate) {
+                        existingPatient.setBirthDate((LocalDate) value);
+                    }
+                }
+                default -> System.out.println("Field not recognized: "+key);
             }
         });
         Patient savedPatient=patientRepository.save(existingPatient);
