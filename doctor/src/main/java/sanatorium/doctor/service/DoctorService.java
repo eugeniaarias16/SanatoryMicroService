@@ -9,6 +9,7 @@ import sanatorium.doctor.repository.IDoctorRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.zip.Deflater;
 
 @Service
 public class DoctorService implements IDoctorService {
@@ -97,10 +98,18 @@ public class DoctorService implements IDoctorService {
             switch (key){
                 case "firstName"-> existingDoctor.setFirstName((String) value);
                 case "lastName"-> existingDoctor.setLastName((String) value);
+                case "salary"->{
+                    if(value instanceof Number){
+                        existingDoctor.setSalary(((Number)value).doubleValue());
+                    } else if (value instanceof String) {
+                        existingDoctor.setSalary(Double.parseDouble((String) value));
+                    }
+                }
                 case"address"-> existingDoctor.setAddress((String) value);
                 case "numberAddress"-> existingDoctor.setNumberAddress((String) value);
                 case "phoneNumber"->existingDoctor.setPhoneNumber((String) value);
                 case "medicalSpecialty"->existingDoctor.setMedicalSpecialty((String) value);
+                default -> System.out.println("Field not recognized: "+key);
             }
         });
         Doctor doctor=doctorRepository.save(existingDoctor);
@@ -115,10 +124,18 @@ public class DoctorService implements IDoctorService {
             switch (key){
                 case "firstName"-> existingDoctor.setFirstName((String) value);
                 case "lastName"-> existingDoctor.setLastName((String) value);
+                case "salary"->{
+                    if(value instanceof Number){
+                        existingDoctor.setSalary(((Number)value).doubleValue());
+                    } else if (value instanceof String) {
+                        existingDoctor.setSalary(Double.parseDouble((String) value));
+                    }
+                }
                 case"address"-> existingDoctor.setAddress((String) value);
                 case "numberAddress"-> existingDoctor.setNumberAddress((String) value);
                 case "phoneNumber"->existingDoctor.setPhoneNumber((String) value);
                 case "medicalSpecialty"->existingDoctor.setMedicalSpecialty((String) value);
+                default -> System.out.println("Field not recognized: "+key);
             }
         });
         Doctor doctor=doctorRepository.save(existingDoctor);

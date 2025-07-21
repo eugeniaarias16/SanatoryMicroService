@@ -12,12 +12,14 @@ import sanatorium.medicalAppointment.entity.MedicalAppointment;
 @Getter
 public class MedicalAppointmentResponseDto {
 
+    private Long id;
     private String fullNamePatient;
     private String appointmentDate;
     private String fullNameDoctor;
 
 
     public MedicalAppointmentResponseDto(MedicalAppointment medicalAppointment){
+        id=medicalAppointment.getId();
         fullNamePatient=medicalAppointment.getPatient().getFirstName()+" "+medicalAppointment.getPatient().getLastName();
         fullNameDoctor=medicalAppointment.getDoctor().getFirstName()+" "+medicalAppointment.getDoctor().getLastName();
         appointmentDate=medicalAppointment.getFormatterDate();
